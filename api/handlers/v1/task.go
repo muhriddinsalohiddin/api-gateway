@@ -5,13 +5,26 @@ import (
 	"net/http"
 	"time"
 
+	"google.golang.org/protobuf/encoding/protojson"
+
 	"github.com/gin-gonic/gin"
 	pb "github.com/muhriddinsalohiddin/api-gateway/genproto"
 	"github.com/muhriddinsalohiddin/api-gateway/pkg/logger"
+	_ "github.com/muhriddinsalohiddin/api-gateway/api/handlers/models"
 	"github.com/muhriddinsalohiddin/api-gateway/pkg/utils"
-	"google.golang.org/protobuf/encoding/protojson"
 )
 
+// CreateTask ...
+// @Summary CreateTask
+// @Description This API for creating a new task
+// @Tags task
+// @Accept  json
+// @Produce  json
+// @Param Task request body models.Task true "taskCreateRequest"
+// @Success 200 {object} models.Task
+// @Failure 400 {object} models.StandardErrorModel
+// @Failure 500 {object} models.StandardErrorModel
+// @Router /v1/tasks/ [post]
 func (h *handlerV1) CreateTask(c *gin.Context) {
 	var (
 		body        pb.Task
@@ -42,6 +55,18 @@ func (h *handlerV1) CreateTask(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, resp)
 }
+
+// GetTask ...
+// @Summary GetTask
+// @Description This API for getting task detail
+// @Tags task
+// @Accept  json
+// @Produce  json
+// @Param id path string true "ID"
+// @Success 200 {object} models.Task
+// @Failure 400 {object} models.StandardErrorModel
+// @Failure 500 {object} models.StandardErrorModel
+// @Router /v1/tasks/{id} [get]
 func (h *handlerV1) GetTask(c *gin.Context) {
 	var jspbMarshal protojson.MarshalOptions
 	jspbMarshal.UseProtoNames = true
@@ -61,6 +86,18 @@ func (h *handlerV1) GetTask(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// ListTasks ...
+// @Summary ListTasks
+// @Description This API for getting list of tasks
+// @Tags task
+// @Accept  json
+// @Produce  json
+// @Param page query string false "Page"
+// @Param limit query string false "Limit"
+// @Success 200 {object} models.ListTasks
+// @Failure 400 {object} models.StandardErrorModel
+// @Failure 500 {object} models.StandardErrorModel
+// @Router /v1/tasks [get]
 func (h *handlerV1) ListTasks(c *gin.Context) {
 	queryParams := c.Request.URL.Query()
 
@@ -92,6 +129,19 @@ func (h *handlerV1) ListTasks(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, resp)
 }
+
+// UpdateTask ...
+// @Summary UpdateTask
+// @Description This API for updating task
+// @Tags task
+// @Accept  json
+// @Produce  json
+// @Param id path string true "ID"
+// @Param Task request body models.UpdateTask true "taskUpdateRequest"
+// @Success 200
+// @Failure 400 {object} models.StandardErrorModel
+// @Failure 500 {object} models.StandardErrorModel
+// @Router /v1/tasks/{id} [put]
 func (h *handlerV1) UpdateTask(c *gin.Context) {
 	var (
 		body        pb.Task
@@ -122,6 +172,18 @@ func (h *handlerV1) UpdateTask(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, resp)
 }
+
+// DeleteTask ...
+// @Summary DeleteTask
+// @Description This API for deleting task
+// @Tags task
+// @Accept  json
+// @Produce  json
+// @Param id path string true "ID"
+// @Success 200
+// @Failure 400 {object} models.StandardErrorModel
+// @Failure 500 {object} models.StandardErrorModel
+// @Router /v1/tasks/{id} [delete]
 func (h *handlerV1) DeleteTask(c *gin.Context) {
 	var jspbMarshal protojson.MarshalOptions
 	jspbMarshal.UseProtoNames = true
@@ -139,6 +201,20 @@ func (h *handlerV1) DeleteTask(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, resp)
 }
+
+// ListOverdueTask ...
+// @Summary ListOverdueTask
+// @Description This API for getting list of tasks
+// @Tags task
+// @Accept  json
+// @Produce  json
+// @Param page query string false "Page"
+// @Param limit query string false "Limit"
+// @Param Task request body models.ListOverdue true "taskListOverdueRequest"
+// @Success 200 {object} models.ListTasks
+// @Failure 400 {object} models.StandardErrorModel
+// @Failure 500 {object} models.StandardErrorModel
+// @Router /v1/taskslist [get]
 func (h *handlerV1) ListOverdueTask(c *gin.Context) {
 	queryParams := c.Request.URL.Query()
 

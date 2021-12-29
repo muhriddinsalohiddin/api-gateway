@@ -2,6 +2,10 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+
+	_ "github.com/muhriddinsalohiddin/api-gateway/api/docs" //swag
 	v1 "github.com/muhriddinsalohiddin/api-gateway/api/handlers/v1"
 	"github.com/muhriddinsalohiddin/api-gateway/config"
 	"github.com/muhriddinsalohiddin/api-gateway/pkg/logger"
@@ -34,5 +38,8 @@ func New(o Option) *gin.Engine {
 	api.PUT("/tasks/:id", handlerV1.UpdateTask)
 	api.DELETE("/tasks/:id", handlerV1.DeleteTask)
 	api.GET("/taskslist", handlerV1.ListOverdueTask)
+
+	url := ginSwagger.URL("swagger/doc.json") //the url pointing to API definition
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	return router
 }
